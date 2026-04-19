@@ -1,103 +1,74 @@
-# Customer Profiling & Clustering — E-Commerce Indonesia
+#  Customer Profiling & Clustering — E-Commerce Indonesia
 
-Analisis segmentasi pelanggan menggunakan RFM Analysis dan K-Means Clustering pada data transaksi e-commerce Indonesia periode Januari 2022 – Juni 2024.
-
----
-
-## Latar Belakang
-
-Dataset terdiri dari 426.000 transaksi dan 28.000 pelanggan unik. Tujuan analisis ini adalah memahami pola perilaku pelanggan, mengidentifikasi segmen yang paling bernilai, dan menghasilkan rekomendasi bisnis yang dapat ditindaklanjuti.
+Analisis segmentasi pelanggan menggunakan RFM Analysis dan K-Means Clustering pada dataset transaksi e-commerce Indonesia.
 
 ---
 
-## Struktur Project
+##  Deskripsi
+
+Notebook ini bertujuan memahami siapa pelanggan kita, bagaimana pola pembelian mereka, dan segmen mana yang perlu diprioritaskan secara bisnis.
+
+- **Periode data:** Januari 2022 – Juni 2024
+- **Dataset:** 426.000 transaksi | 28.000 pelanggan unik
+- **Metode:** RFM Analysis + K-Means Clustering (k=4)
+
+---
+
+##  Struktur Folder
 
 ```
-customer-profiling-clustering-ecommerce/
-│
-├── notebook/
-│   └── Customer_Profiling_Clustering.ipynb
-│
-├── output/
-│   ├── rfm_customer_segments.csv
-│   ├── segment_summary.csv
-│   └── ecommerce_cleaned_sample.csv
-│
-├── images/
-│   └── (screenshot visualisasi)
-│
-└── README.md
+├── customer-profiling-clustering.ipynb   # Notebook utama
+├── dashboard_final.csv                   # Dataset lengkap dengan label segmen
+└── output/
+    ├── rfm_customer_segments.csv         # RFM score & cluster per pelanggan
+    ├── segment_summary.csv               # Ringkasan per segmen
+    ├── 01_missing_values.png
+    ├── 02_outlier_boxplots.png
+    ├── 03_revenue_trend.png
+    ├── 04_category_city.png
+    ├── 05_payment_age.png
+    ├── 06_rfm_scores.png
+    ├── 07_rfm_overview.png
+    ├── 08_elbow.png
+    ├── 09_cluster_pca.png
+    └── 10_cluster_demografi.png
 ```
 
 ---
 
-## Tahapan Analisis
+##  Alur Analisis
 
-**1. Data Understanding & Cleaning**
-Pemeriksaan missing values, konversi tipe data, pengisian nilai kosong dengan median/modus, dan penghapusan outlier menggunakan metode trimming 1%–99% pada kolom `net_revenue`.
-
-**2. Exploratory Data Analysis**
-Analisis tren revenue bulanan, performa per kategori produk dan kota, distribusi demografi pelanggan, serta preferensi metode pembayaran.
-
-**3. RFM Analysis**
-Setiap pelanggan dihitung nilai Recency, Frequency, dan Monetary-nya, kemudian diberi skor 1–5 per dimensi. Hasilnya digunakan untuk membagi pelanggan ke dalam 10 segmen perilaku.
-
-**4. K-Means Clustering**
-Pengelompokan otomatis pelanggan menggunakan algoritma K-Means dengan jumlah cluster optimal k=4, ditentukan melalui elbow method dan silhouette score. Hasil clustering divalidasi dengan PCA untuk visualisasi dan deep-dive demografi per cluster.
-
-**5. Rekomendasi Bisnis**
-Strategi spesifik per segmen — dari program retensi untuk Champions hingga win-back campaign untuk At Risk — beserta rekomendasi operasional terkait ekspansi kota dan kerjasama e-wallet.
+1. **Data Cleaning** — konversi tipe, imputasi missing values, trimming outlier
+2. **EDA** — tren revenue, performa kategori & kota, demografi pelanggan
+3. **RFM Analysis** — scoring & labeling 10 segmen perilaku pelanggan
+4. **K-Means Clustering** — pengelompokan berbasis machine learning (k=4 optimal)
+5. **Rekomendasi Bisnis** — aksi per segmen berdasarkan temuan data
 
 ---
 
-## Temuan Utama
+##  Key Insights
 
-- Champions hanya 23,5% dari total pelanggan, namun menyumbang 69,3% dari total revenue
-- Electronics mendominasi revenue (Rp 78 miliar), jauh di atas Fashion (Rp 22,3 miliar)
-- Median Recency 97 hari — setengah pelanggan sudah lebih dari 3 bulan tidak bertransaksi
-- E-wallet (GoPay, OVO, DANA) mencakup 43% dari seluruh transaksi
-- Kelompok Millennial (25–34 tahun) adalah penyumbang revenue terbesar
-
----
-
-## Dashboard
-
-Visualisasi interaktif tersedia di Looker Studio:
-
-[Lihat Dashboard](https://lookerstudio.google.com/LINK-DUMMY)
-
-Dashboard mencakup ringkasan eksekutif, peta segmentasi RFM, profil demografi pelanggan, dan detail per segmen dengan filter interaktif.
+| Temuan | Detail |
+|---|---|
+|  Konsentrasi revenue | Champions (23,5% pelanggan) menyumbang **69,3% total revenue** |
+|  Repeat purchase rendah | Median frequency hanya **4x dalam 2,5 tahun** |
+|  Cancellation rate tinggi | **11%** — sudah melewati batas aman industri |
+|  Peluang kota tier-2 | Balikpapan & kota Kalimantan/Sulawesi punya spending per kapita tinggi |
+|  Dominasi e-wallet | GoPay + OVO + DANA = **~43% transaksi** |
 
 ---
 
-## Tech Stack
+##  Cluster Hasil K-Means
 
-- Python 3
-- Pandas, NumPy
-- Scikit-learn (KMeans, PCA, StandardScaler)
-- Matplotlib, Seaborn
-- Looker Studio
-
----
-
-## Cara Menjalankan Notebook
-
-1. Clone repository ini
-```bash
-git clone https://github.com/username/customer-profiling-clustering-ecommerce.git
-```
-
-2. Install dependensi
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn
-```
-
-3. Letakkan file `ecommerce_raw_data.csv` di direktori yang sama dengan notebook
-
-4. Jalankan notebook secara berurutan dari sel pertama
+| Cluster | Karakteristik |
+|---|---|
+| **VIP — High Spender** | Monetary tertinggi, Gen X & Baby Boomer |
+| **Frequent Buyer** | Frekuensi belanja tertinggi |
+| **Occasional Buyer** | Belanja sporadis, potensi ditingkatkan |
+| **Inactive / Churned** | Sudah lama tidak bertransaksi |
 
 ---
 
-## Author
+##  Tools & Library
 
-Novita Anggraini
+`Python` · `Pandas` · `NumPy` · `Scikit-learn` · `Matplotlib` · `Seaborn`
